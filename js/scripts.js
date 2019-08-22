@@ -5,6 +5,7 @@
 
 })
 
+}
   function getAll() {
     return repository;
   }
