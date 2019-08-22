@@ -1,36 +1,31 @@
-var pokemonRepository = (function () {
+  (function () {
+    var pokemonRepository = (function() {
   var repository = [];
   var apiUrl = 'https://pokeapi.co/api/v2/pokemon/?limit=150';
-  function add(pokemon) {
-    repository.push(pokemon);
-  }
+
+})
 
   function getAll() {
     return repository;
   }
 
   function showDetails(pokemon) {
-    var name = pokemon.name;
-    pokemonRepository.loadDetails(pokemon)
-      .then(function(details){
-        showModal(details)
-      })
+    function showDetails(pokemon){
+      pokemonRepository.loadDetails(pokemon)
   }
 
-  function loadList() {
-    return fetch(apiUrl).then(function (response) {
-      return response.json();
-    }).then(function (json) {
-      json.results.forEach(function (item) {
+  function loadList(){
+    return $.ajax(apiUrl, {dataType: 'json'}).then(function(item){
+      $.each(item.results, function(index, item){
         var pokemon = {
           name: item.name,
           detailsUrl: item.url
-        };
-        add(pokemon);
-      });
-    }).catch(function (e) {
+        }
+        add(pokemon)
+      })
+      }).catch(function(e){
       console.error(e);
-    })
+    });
   }
 
   function addListItem(pokemonItem) {
