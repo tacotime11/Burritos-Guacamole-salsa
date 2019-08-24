@@ -1,24 +1,22 @@
   (function () {
-    var pokemonRepository = (function() {
-  var repository = [];
-  var apiUrl = 'https://pokeapi.co/api/v2/pokemon/?limit=150';
-
+    var $pokemonRepository = (function() {
+  var $repository = [];
+  var $apiUrl = 'https://pokeapi.co/api/v2/pokemon/?limit=150';
 })
 
-}
   function getAll() {
-    return repository;
+    return $repository;
   }
 
   function showDetails(pokemon) {
     function showDetails(pokemon){
-      pokemonRepository.loadDetails(pokemon)
+      $pokemonRepository.loadDetails(pokemon)
   }
 
   function loadList(){
     return $.ajax(apiUrl, {dataType: 'json'}).then(function(item){
       $.each(item.results, function(index, item){
-        var pokemon = {
+        var $pokemon = {
           name: item.name,
           detailsUrl: item.url
         }
@@ -29,30 +27,17 @@
     });
   }
 
-  function addListItem(pokemonItem) {
-    var listItemText = document.createTextNode(pokemonItem.name);
-    var buttonText = document.createTextNode('show details');
-    var $detailsButton = document.createElement('button');
-    var $li = document.createElement('li');
-    var $p = document.createElement('p');
-    var $ul = document.querySelector('.pokemon-list');
-
-    $detailsButton.classList.add('details-button');
-    $li.classList.add('list-item');
-
-    $detailsButton.appendChild(buttonText);
-    $p.appendChild(listItemText);
-    $li.appendChild($p);
-    $li.appendChild($detailsButton);
-    $ul.appendChild($li);
-
-    $detailsButton.addEventListener('click', function(event) {
-      showDetails(pokemonItem);
+  function addListItem(pokemon){
+    var $listItem = $();
+    listItem.text(pokemon.name);
+    $pokemonList.append(listItem);
+    listItem.click(function() {
+      showDetails(pokemon)
     });
   }
 
   function loadDetails(item) {
-    var url = item.detailsUrl;
+    var $url = item.detailsUrl;
     return fetch(url).then(function (response) {
       return response.json();
     }).then(function (details) {
@@ -73,39 +58,36 @@
 
     $modalContainer.innerHTML = '';
 
-    var modal = document.createElement('div');
-    modal.classList.add('modal');
+    var $modal = document.createElement('div');
+    $modal.addclass('modal');
 
 
-    var closeButtonElement = document.createElement('button');
-    closeButtonElement.classList.add('modal-close');
-    closeButtonElement.innerText = 'Close';
-    closeButtonElement.addEventListener('click', hideModal);
+    function showDetails(pokemon){
+      pokemonRepository.loadDetails(pokemon).then(function() {
+        var modal = $('.modal-body');
+        var name = $('.modal-title').text(pokemon.name);
+        var height = $('modal.height>').text(pokemon.height);
+        var image = $('<img class="pokemon-image">');
+        image.attr('src', pokemon.imageUrl);
 
-    var titleElement = document.createElement('h1');
-    titleElement.innerText = details.name
 
-    var contentElement = document.createElement('p');
-    contentElement.innerText = details.height;
+        if(modal.children().length) {
+          modal.children().remove();
+        }
 
-    var imageElement = document.createElement('img');
-    imageElement.src = details.imageUrl;
+        modal.append(image)
+             .append(height)
+             .append(type);
 
-    modal.appendChild(closeButtonElement);
-    modal.appendChild(titleElement);
-    modal.appendChild(contentElement);
-    modal.appendChild(imageElement);
-    $modalContainer.appendChild(modal);
-
-    $modalContainer.classList.add('is-visible');
-  }
+      });
+    }
 
   function hideModal() {
     $modalContainer.classList.remove('is-visible');
 
     if (dialogPromiseReject) {
       dialogPromiseReject();
-      dialogPromiseRejct = null;
+      dialogPromiseReject = null;
     }
   }
 
@@ -120,8 +102,11 @@
 
 })();
 
-pokemonRepository.loadList().then( () =>{
-  pokemonRepository.getAll().forEach(function(pokemon){
-    pokemonRepository.addListItem(pokemon);
+$pokemonRepository.loadList().then(function(){
+  var $pokemon = $pokemonRepository.getAll();
+
+  $.each($pokemon, function{
+        addListItem.$pokemon;
   });
 });
+})();
