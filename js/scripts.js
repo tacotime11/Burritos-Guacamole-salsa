@@ -1,22 +1,21 @@
-  (function () {
-    var $pokemonRepository = (function() {
-  var $repository = [];
-  var $apiUrl = 'https://pokeapi.co/api/v2/pokemon/?limit=150';
+var $pokemonRepository = (function() {
+    function getAll() {
+  var repository = [];
+  var apiUrl = 'https://pokeapi.co/api/v2/pokemon/?limit=150';
 })
 
   function getAll() {
-    return $repository;
+    return repository;
   }
 
   function showDetails(pokemon) {
-    function showDetails(pokemon){
       $pokemonRepository.loadDetails(pokemon)
   }
 
   function loadList(){
-    return $.ajax(apiUrl, {dataType: 'json'}).then(function(item){
-      $.each(item.results, function(index, item){
-        var $pokemon = {
+    return .ajax(apiUrl, {dataType: 'json'}).then(function(item){
+      .each(item.results, function(index, item){
+        var pokemon = {
           name: item.name,
           detailsUrl: item.url
         }
@@ -27,17 +26,21 @@
     });
   }
 
+  function add(pokemon) {
+    $repository.push(pokemon);
+  }
+
   function addListItem(pokemon){
-    var $listItem = $();
+    var listItem = ();
     listItem.text(pokemon.name);
-    $pokemonList.append(listItem);
+    pokemonList.append(listItem);
     listItem.click(function() {
       showDetails(pokemon)
     });
   }
 
   function loadDetails(item) {
-    var $url = item.detailsUrl;
+    var url = item.detailsUrl;
     return fetch(url).then(function (response) {
       return response.json();
     }).then(function (details) {
@@ -51,15 +54,13 @@
     });
   }
 
-  var $modalContainer = document.querySelector('#modal-container');
+  var modalContainer = document.querySelector('#modal-container');
   var dialogPromiseReject;
 
-  function showModal(details) {
+  function showModal(item) {
 
-    $modalContainer.innerHTML = '';
-
-    var $modal = document.createElement('div');
-    $modal.addclass('modal');
+    var modal = document.createElement('div');
+    modal.addclass('modal');
 
 
     function showDetails(pokemon){
@@ -99,14 +100,12 @@
     addListItem: addListItem,
     loadDetails: loadDetails,
   };
-
 })();
 
 $pokemonRepository.loadList().then(function(){
-  var $pokemon = $pokemonRepository.getAll();
+var $pokemon = $pokemonRepository.getAll();
 
-  $.each($pokemon, function{
-        addListItem.$pokemon;
-  });
+$pokemonRepository.getAll().forEach(function(pokemon){
+  $pokemonRepository.addListItem(pokemon);
 });
-})();
+});
