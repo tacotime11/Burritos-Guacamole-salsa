@@ -1,11 +1,23 @@
 var $pokemonRepository = (function() {
+  var $repository = [];
+  var apiUrl = 'https://pokeapi.co/api/v2/pokemon/?limit=150';
   function getAll() {
   }
 
   function showDetails(pokemon) {
   }
 
-  function loadList(){
+  function loadList() {
+    return fetch(apiUrl).then(function(response) {
+      return response.json();
+    }).then(function(value) {
+      value.results.forEach(function(item) {
+        var pokemon = {
+          name: item.name,
+          details.Url: item.url,
+        }
+     });
+   })
   }
 
   function add(pokemon) {
