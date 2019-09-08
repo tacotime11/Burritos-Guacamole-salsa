@@ -26,21 +26,77 @@ var $pokemonRepository = (function() {
     $repository.push(pokemon);
   }
 
-  function addListItem(pokemon){
+  function addListItem(pokemonItem) {
+    var listItemText = $(pokemon.name);
+    var buttonText = $('show details');
+    var $detailsButton = $('button');
+    var $li = $('li');
+    var $p =  $('p');
+    var $ul = $('.pokemon-list');
+
+    $detailsButton.classlist.add('details-button');
+    $p.appendChild(listItemText);
+    $li.appendChild($p);
+    $li.appendChild($li);
+
+    $detailsButton.addEventListener('click', function(event){
+      showDetails(pokemonItem);
+    });
   }
 
-  function loadDetails(item) {
+  function showModal(details) {
 
+    $modalContainer.innerHTML = '';
+
+    var $modal = $('div');
+    $modal.classList.add('modal');
+
+
+    var $closeButtonElement = $('button');
+    $closeButtonElement.innerHTML('modal-close');
+    $closeButtonElement.innerText('Close');
+    $closeButtonElement.addEventListener('click', hideModal);
+
+    var $titleElement = $('h1');
+    $titleElement.innerText(details.name);
+
+    var $contentElement = $('p');
+    $contentElement.innerText(details.height);
+
+    var $imageElement = $('img');
+    $imageElement.src(details.imageUrl);
+
+    $('body').append($closeButtonElement);
+    $('body').append($titleElement);
+    $('body').append($contentElement);
+    $('body').append($imageElement);
+    $('body').append($modal);
+
+    $modalContainer.classList.add('is-visible');
   }
 
-  function showModal(item) {
-  }
+  function loadDetails(pokemon){
+    var url = item.detailsUrl;
+    return fetch(url).then(function (response) {
+      return response.json();
+    }).then(function (details) {
 
-
-  function showDetails(pokemon){
-  }
+      item.imageUrl = details.sprites.front_default;
+      item.height = details.height;
+      item.types = Object.keys(details.types);
+        return item;
+      }).catch(function (e) {
+        console.error(e);
+      });
+}
 
   function hideModal() {
+    $modalContainer.classList.remove('is-visible');
+
+    if (dialogPromiseReject) {
+      dialogPromiseReject();
+      dialogPromiseReject = null;
+    }
   }
 
   return {
